@@ -10,8 +10,14 @@ class ChatScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
-
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> {  @override
+  void initState() {
+    super.initState();
+    _messages.add(const ChatMessage(
+      text: '👋 Welcome! How can I assist you today?',
+      isUser: false,
+    ));
+  }
   final TextEditingController _textController = TextEditingController();
   final List<ChatMessage> _messages = [];
 
@@ -24,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
         isUser: true,
       ));
 
-      String botResponse = getBotResponse(text);
+      String botResponse = getBotResponse(text.toLowerCase());
       _messages.add(ChatMessage(
         text: botResponse,
         isUser: false,
@@ -33,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String getBotResponse(String userMessage) {
-    if (keywords.contains(userMessage)) {
+    if (keywords.contains(userMessage.toLowerCase())) {
       return responses.elementAt(keywords.indexOf(userMessage));
     } else {
       return "Sorry, I didn't understand your response.";
@@ -71,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),
-                  onPressed: () => _handleSubmitted(_textController.text.toLowerCase()),
+                  onPressed: () => _handleSubmitted(_textController.text),
                 ),
               ],
             ),
